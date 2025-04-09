@@ -30,6 +30,8 @@ const Item = styled.li`
   a {
     text-decoration: none;
     color: inherit;
+    display: flex;
+    width: 100%; 
   }
 
   &:hover {
@@ -47,7 +49,7 @@ const Info = styled.div`
   flex: 1;
   display: flex;
   flex-direction: column;
-
+  margin-left: 0.75rem;
   strong {
     font-size: 0.9rem;
     margin-bottom: 0.25rem;
@@ -63,10 +65,8 @@ export const SearchResults: React.FC = () => {
   const query = useSelector((state: RootState) => state.search.query)
   const { data, isFetching, isError } = useSearchBooksQuery(query, {
     skip: query.trim().length < 2,
-
   })
 
-  // the api returns an error message if the query search string is too short
   if (query.trim().length < 2) return null
   if (isFetching) return <Dropdown><Item>Loading...</Item></Dropdown>
   if (isError) return <Dropdown><Item>Error loading results</Item></Dropdown>
@@ -82,13 +82,11 @@ export const SearchResults: React.FC = () => {
             rel="noopener noreferrer"
           >
             <Thumbnail />
-          </a>
             <Info>
-            <strong>{book.title}</strong>
-            {book.author_name && <span>{book.author_name.join(', ')}</span>}
-          </Info>
-        
-          
+              <strong>{book.title}</strong>
+              {book.author_name && <span>{book.author_name.join(', ')}</span>}
+            </Info>
+          </a>
         </Item>
       ))}
     </Dropdown>
