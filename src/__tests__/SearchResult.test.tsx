@@ -1,41 +1,60 @@
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import { Provider } from 'react-redux';
-import { SearchBar } from '../components/SearchBar';
-import { store } from '../app/store';
-import { expect, test, describe, beforeEach } from 'vitest';
+import { render, screen } from '@testing-library/react';
+import { expect, test, describe, beforeEach, vi } from 'vitest';
 import { SearchResults } from '../components/SearchResults';
+import * as openLibraryApi from '../api/openLibraryApi'
+import { useSelector } from 'react-redux';
+import mockedData from './mockedBooks.json'
 
+vi.mock('react-redux', () => ({
+    ...vi.importActual('react-redux'),
+    useSelector: vi.fn()
+}));
 
 describe('Search results Tests', () => {
+
     beforeEach(() => {
-        render(
-            <Provider store={store}>
-                <SearchBar />
-                <SearchResults />
-            </Provider>
-        );
+       vi.restoreAllMocks();
+       vi.mocked(useSelector).mockImplementation(() => 'harry');
     });
 
-    test('Should not render results when user types 1 character', async () => {
-        const input = screen.getByPlaceholderText(/Type at least 2 characters/i);
-        fireEvent.change(input, { target: { value: 'h' } });
+    test('Should not render anything if the query is not triggered', () => {
+        const spy = vi.spyOn(openLibraryApi, 'useSearchBooksQuery').mockImplementation(() => ({
+            data: null,
+            isFetching: false,
+            error: null,
+            refetch: vi.fn(),
+        }));
 
-        await waitFor(() => {
-            const bookItems = screen.queryAllByTestId(/^book-item-/);
-            expect(bookItems.length).toBe(0);
-        });
+        render(<SearchResults />);
+        vi.mocked(useSelector).mockImplementation(() => '');
+        expect(spy).toHaveBeenCalledTimes(1);
+        expect(screen.queryByTestId('dropdown')).not.toBeInTheDocument();
     });
 
-    test('Should render results when user types 2 or more characters', async () => {
-        const input = screen.getByPlaceholderText(/Type at least 2 characters/i);
+     test('Should should loading state when is fetching', () => {
+         vi.spyOn(openLibraryApi, 'useSearchBooksQuery').mockImplementation(() => ({
+            data: null,
+            isFetching: true,
+            error: null,
+            refetch: vi.fn(),
+        }));
 
-        await waitFor(() => {
-            const bookItems = screen.queryAllByTestId(/^book-item-/);
-            fireEvent.change(input, { target: { value: 'harry' } });
-            expect(screen.queryByText('Loading...')).toBeFalsy()
-            expect(screen.queryByText('No results found.')).toBeFalsy();
-            expect(screen.queryByText('Error loading results')).toBeFalsy();
-            expect(bookItems.length).toBeGreaterThan(0)
-        })
+        render(<SearchResults />);
+        expect(screen.queryByText('Loading...')).toBeInTheDocument();
+    });
+
+    test('should show a list of items if data is fetched', () => {
+        vi.spyOn(openLibraryApi, 'useSearchBooksQuery').mockImplementation(() => ({
+            data: {
+                docs: mockedData
+            },
+            isFetching: false,
+            error: null,
+            refetch: vi.fn(),
+        }));
+
+        render(<SearchResults />);
+        expect(screen.queryByText('Loading...')).not.toBeInTheDocument();
+        expect(screen.queryAllByTestId(/book-item/i)).toHaveLength(10);
     });
 });
