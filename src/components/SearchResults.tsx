@@ -62,21 +62,22 @@ const Info = styled.div`
 export const SearchResults: React.FC = () => {
   const query = useSelector((state: RootState) => state.search.query)
   const { data, isFetching, isError } = useSearchBooksQuery(query, {
-    skip: query.trim().length < 3,
+    skip: query.trim().length < 2,
 
   })
 
-  if (query.trim().length < 3) return null
+  // the api returns an error message if the query search string is too short
+  if (query.trim().length < 2) return null
   if (isFetching) return <Dropdown><Item>Loading...</Item></Dropdown>
   if (isError) return <Dropdown><Item>Error loading results</Item></Dropdown>
   if (!data?.docs.length) return <Dropdown><Item>No results found.</Item></Dropdown>
-  console.log(data)
+
   return (
     <Dropdown>
       {data.docs.map((book: Book) => (
         <Item key={book.key}>
           <a
-            href={`https://www.amazon.com/s?k=${encodeURIComponent(book.title)}`}
+            href={`${import.meta.env.VITE_AMAZON_URL}${encodeURIComponent(book.title)}`}
             target="_blank"
             rel="noopener noreferrer"
           >

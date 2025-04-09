@@ -29,7 +29,7 @@ export const SearchBar: React.FC = () => {
     <SearchWrapper>
       <Input
         type="text"
-        placeholder="Keyword"
+        placeholder="Type at least 2 characters"
         value={query}
         onChange={handleChange}
       />
