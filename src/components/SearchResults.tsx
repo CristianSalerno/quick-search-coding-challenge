@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import { useSelector } from 'react-redux'
 import { RootState } from '../app/store'
 import { useSearchBooksQuery } from '../api/openLibraryApi'
+import { Book } from '../types/book'
 
 const Dropdown = styled.ul`
   position: absolute;
@@ -69,10 +70,10 @@ export const SearchResults: React.FC = () => {
   if (isFetching) return <Dropdown><Item>Loading...</Item></Dropdown>
   if (isError) return <Dropdown><Item>Error loading results</Item></Dropdown>
   if (!data?.docs.length) return <Dropdown><Item>No results found.</Item></Dropdown>
-  
+  console.log(data)
   return (
     <Dropdown>
-      {data.docs.map((book) => (
+      {data.docs.map((book: Book) => (
         <Item key={book.key}>
           <a
             href={`https://www.amazon.com/s?k=${encodeURIComponent(book.title)}`}
@@ -81,10 +82,12 @@ export const SearchResults: React.FC = () => {
           >
             <Thumbnail />
           </a>
-          <Info>
+            <Info>
             <strong>{book.title}</strong>
             {book.author_name && <span>{book.author_name.join(', ')}</span>}
           </Info>
+        
+          
         </Item>
       ))}
     </Dropdown>

@@ -1,54 +1,110 @@
-# React + TypeScript + Vite
+# 🔍 Quick Search App
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This is a quick book search app built with **React**, **Redux Toolkit + RTK Query**, **styled-components**, and **TypeScript**, using the [OpenLibrary API](https://openlibrary.org/dev/docs/api/).
 
-Currently, two official plugins are available:
+It features real-time search suggestions, smooth UX feedback, and Amazon linking per book result.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+---
 
-## Expanding the ESLint configuration
+## 🚀 Getting Started
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+### 1. Clone the repository
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+```bash
+git clone https://github.com/your-username/quick-search-app.git
+cd quick-search-app
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+### 2. Install dependencies (using pnpm)
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
+```bash
+pnpm install
 ```
+
+> If you don’t have pnpm:
+> ```bash
+> npm install -g pnpm
+> ```
+
+### 3. Run the app
+
+```bash
+pnpm dev
+```
+
+The app will be available at [http://localhost:5173](http://localhost:5173)
+
+---
+
+## 🧲 Running Tests
+
+This project uses **Vitest** + **React Testing Library**.
+
+### Run tests:
+
+```bash
+pnpm test
+```
+
+### Run tests in UI mode (dev-friendly interface):
+
+```bash
+pnpm test:ui
+```
+
+---
+
+## 🧰 Stack
+
+- 🧩 **React**
+- 🛠️ **Redux Toolkit + RTK Query**
+- 💅 **styled-components**
+- 🧠 **TypeScript**
+- ⚡ **Vite**
+- 🧲 **Vitest** + **@testing-library/react**
+
+---
+
+## 🗂️ Project Structure
+
+```
+src/
+│
+├── app/               # Redux store setup
+├── components/        # UI components (Header, SearchBar, Results)
+├── features/          # Redux slices and logic
+├── __tests__/         # Unit/integration tests
+└── types/             # Custom TS types
+```
+
+---
+
+## 📖 Features
+
+- 🔎 **Live search** with OpenLibrary API (starts after 3 characters)
+- ⚡ **Instant feedback** (Loading, No results, Error, etc.)
+- 📚 **Amazon search integration** for each result
+- 🧲 Fully **typed** and tested with Vitest
+
+---
+
+## 🧼 Scripts
+
+```json
+"dev": "vite",
+"build": "vite build",
+"preview": "vite preview",
+"test": "vitest",
+"test:ui": "vitest --ui"
+```
+
+---
+
+## 📌 Notes
+
+- The search avoids unnecessary calls when input is shorter than 3 characters.
+- The app uses `isFetching` from RTK Query to ensure loading indicators show properly even with cached data.
+
+---
+
+Feel free to reach out if you have any questions or feedback!
