@@ -102,7 +102,7 @@ src/
 
 ## 📌 Notes
 
-- The search avoids unnecessary calls when input is shorter than 3 characters.
+- The search avoids unnecessary calls when input is shorter than 2 characters.
 - The app uses `isFetching` from RTK Query to ensure loading indicators show properly even with cached data.
 
 ---

@@ -73,9 +73,9 @@ export const SearchResults: React.FC = () => {
   if (!data?.docs.length) return <Dropdown><Item>No results found.</Item></Dropdown>
 
   return (
-    <Dropdown>
+    <Dropdown data-testid="dropdown">
       {data.docs.map((book: Book) => (
-        <Item key={book.key}>
+        <Item key={book.key} data-testid={`book-item-${book.key}`} >
           <a
             href={`${import.meta.env.VITE_AMAZON_URL}${encodeURIComponent(book.title)}`}
             target="_blank"
